@@ -3,7 +3,7 @@ Cluster K8S généré par chat gpt
 
 # Chat GPT:
 
-## V1:
+## Cluster V1:
 
 Ce cluster Kubernetes définit un namespace pour l'application et deux services, l'un pour le serveur PostgreSQL et l'autre pour PostgREST. Il définit également deux déploiements, l'un pour le serveur PostgreSQL et l'autre pour PostgREST.
 
@@ -11,7 +11,7 @@ Le serveur PostgreSQL utilise l'image Docker "postgres:latest" et définit les v
 
 PostgREST utilise l'image Docker "postgrest/postgrest:latest" et définit les variables d'environnement PGRST_DB_URI, PGRST_DB_SCHEMA, PGRST_SERVER_PROXY_URI, PGRST_SERVER_HOST et PGRST_SERVER_PORT pour se connecter au serveur PostgreSQL et configurer le serveur PostgREST.
 
-## V2:
+## Cluster V2:
 
 Ce fichier YAML crée un déploiement (Deployment) pour l'application PostgREST, avec trois réplicas (replicas: 3). Il crée également un service (Service) pour exposer l'application à l'extérieur du cluster.
 
