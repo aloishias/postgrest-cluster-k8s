@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myapp-namespace
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-postgresql
+  namespace: myapp-namespace
+spec:
+  selector:
+    app: myapp-postgresql
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: 5432
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-postgresql
+  namespace: myapp-namespace
+spec:
+  selector:
+    matchLabels:
+      app: myapp-postgresql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myapp-postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: myapp_user
+            - name: POSTGRES_PASSWORD
+              value: myapp_password
+            - name: POSTGRES_DB
+              value: myapp_db
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-postgrest
+  namespace: myapp-namespace
+spec:
+  selector:
+    app: myapp-postgrest
+  ports:
+    - name: postgrest
+      port: 3000
+      targetPort: 3000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-postgrest
+  namespace: myapp-namespace
+spec:
+  selector:
+    matchLabels:
+      app: myapp-postgrest
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myapp-postgrest
+    spec:
+      containers:
+        - name: postgrest
+          image: postgrest/postgrest:latest
+          env:
+            - name: PGRST_DB_URI
+              value: postgresql://myapp_user:myapp_password@myapp-postgresql/myapp_db
+            - name: PGRST_DB_SCHEMA
+              value: public
+            - name: PGRST_SERVER_PROXY_URI
+              value: http://myapp-postgrest
+            - name: PGRST_SERVER_HOST
+              value: 0.0.0.0
+            - name: PGRST_SERVER_PORT
+              value: "3000"
