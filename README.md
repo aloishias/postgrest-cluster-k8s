@@ -20,3 +20,46 @@ Dans le déploiement, le conteneur PostgREST utilise l'image postgrest/postgrest
 Le service redirige le trafic vers le port 3000 du conteneur PostgREST en interne, mais écoute sur le port 80 pour les requêtes HTTP externes.
 
 Il est important de noter que ce fichier YAML ne configure pas la base de données PostgreSQL elle-même, qui doit être configurée séparément.
+
+## Proposition d'achitecture de fichier de configuration d'un cluster k8s:
+
+```lua
+kubernetes/
+├── deployments/
+│   ├── app1.yaml
+│   ├── app2.yaml
+│   ├── app3.yaml
+│   └── ...
+├── services/
+│   ├── app1.yaml
+│   ├── app2.yaml
+│   ├── app3.yaml
+│   └── ...
+├── configmaps/
+│   ├── app1-config.yaml
+│   ├── app2-config.yaml
+│   ├── app3-config.yaml
+│   └── ...
+├── secrets/
+│   ├── app1-secrets.yaml
+│   ├── app2-secrets.yaml
+│   ├── app3-secrets.yaml
+│   └── ...
+└── namespaces/
+    ├── production.yaml
+    └── staging.yaml
+```
+
+Dans cet exemple, nous avons un répertoire kubernetes/ qui contient les fichiers de configuration pour notre cluster k8s. Les différents types de ressources Kubernetes sont organisés en sous-répertoires.
+
+Le sous-répertoire deployments/ contient des fichiers YAML pour les déploiements des applications. Chaque fichier YAML correspond à un déploiement d'une application spécifique, par exemple app1.yaml, app2.yaml, etc.
+
+Le sous-répertoire services/ contient des fichiers YAML pour les services de l'application. Chaque fichier YAML correspond à un service pour une application spécifique, par exemple app1.yaml, app2.yaml, etc.
+
+Le sous-répertoire configmaps/ contient des fichiers YAML pour les ConfigMaps de l'application. Chaque fichier YAML correspond à une ConfigMap pour une application spécifique, par exemple app1-config.yaml, app2-config.yaml, etc.
+
+Le sous-répertoire secrets/ contient des fichiers YAML pour les Secrets de l'application. Chaque fichier YAML correspond à un Secret pour une application spécifique, par exemple app1-secrets.yaml, app2-secrets.yaml, etc.
+
+Enfin, le sous-répertoire namespaces/ contient des fichiers YAML pour les namespaces de l'application. Chaque fichier YAML correspond à un namespace pour une environnement spécifique, par exemple production.yaml, staging.yaml, etc.
+
+Cette organisation permet une bonne séparation des ressources et facilite la gestion et la maintenance du cluster k8s.
